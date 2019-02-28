@@ -7,9 +7,7 @@ class Book(db.Model):
     title = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    review_count = db.Column(db.Integer, nullable=False)
-    ratings_count = db.Column(db.Integer, nullable=False)
-    ratings_average = db.Column(db.Integer, nullable=False)
+
 
 
 class User(db.Model):
