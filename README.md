@@ -7,11 +7,11 @@
 
 
 # Outside resources
-https://www.w3schools.com/python/default.asp
-https://scotch.io/@mbithenzomo
-https://flask-migrate.readthedocs.io/en/latest/
-http://flask.pocoo.org/docs/1.0/blueprints/
-https://flask-login.readthedocs.io/en/latest/
++ https://www.w3schools.com/python/default.asp
++ https://scotch.io/@mbithenzomo
++ https://flask-migrate.readthedocs.io/en/latest/
++ http://flask.pocoo.org/docs/1.0/blueprints/
++ https://flask-login.readthedocs.io/en/latest/
 
 # Website requirements
 + **Registration**: Users should be able to register for your website, providing (at minimum) a username and password.
