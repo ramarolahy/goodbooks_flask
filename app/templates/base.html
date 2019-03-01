@@ -17,20 +17,18 @@
     <title>{{ title }} | GoodBooks</title>
 </head>
 <body>
-<div class="container">
-    <!-- Insert header -->
-    {% block header %}
-    {% endblock %}
+<!-- Insert header -->
+{% block header %}
+{% endblock %}
+<div class="container-fluid pt-5">
+
     <!-- Insert body -->
     {% block body %}
     {% endblock %}
-    <footer>
-        <!-- Insert footer -->
-        {% include './includes/footer.html' %}
-    </footer>
-
-
 </div>
-
+<footer class="footer">
+    <!-- Insert footer -->
+    {% include './includes/footer.html' %}
+</footer>
 </body>
 </html>

@@ -13,6 +13,7 @@
 + http://flask.pocoo.org/docs/1.0/blueprints/
 + https://flask-login.readthedocs.io/en/latest/
 + https://flask-wtf.readthedocs.io/en/stable/quickstart.html
++ https://pythonhosted.org/Flask-Bootstrap/
 
 # Website requirements
 + **Registration**: Users should be able to register for your website, providing (at minimum) a username and password.

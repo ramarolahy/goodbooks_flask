@@ -28,6 +28,10 @@ class Book(db.Model):
 class User(UserMixin, db.Model):
     """
     Create an User table
+
+    UserMixin provides default implementations for the methods that Flask-Login
+    expects user objects to have.
+    see https://flask-login.readthedocs.io/en/latest/#flask_login.UserMixin
     """
 
     # Ensures table will be named in plural and not in singular
@@ -68,3 +72,9 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User: {}>'.format(self.email)
+
+
+# Set up user_loader
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

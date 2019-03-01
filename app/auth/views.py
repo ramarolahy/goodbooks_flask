@@ -1,3 +1,5 @@
+import flask
+import is_safe_url
 from flask import flash, redirect, render_template, url_for
 from flask_login import login_required, login_user, logout_user
 
@@ -15,6 +17,8 @@ def register():
     Handle requests to the /register route
     Add aa user to the database through the registration form
     """
+
+    #
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(email=form.email.data,
@@ -50,15 +54,18 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(
                 form.password.data):
-            # log user in
+            # Login and validate the user.
+            # user should be an instance of your `User` class
             login_user(user)
+
+            flash('You are logged in!', 'info')
 
             # redirect to the profile page after login
             return redirect(url_for('home.profile'))
 
         # when login details are incorrect
         else:
-            flash('Invalid email or password.')
+            flash('Invalid email or password.', 'error')
 
     # load login template
     return render_template('auth/login.html', form=form, title='Login')
@@ -74,7 +81,7 @@ def logout():
     Log an user out through the logout link
     """
     logout_user()
-    flash('You have successfully been logged out.')
+    flash('You have successfully been logged out.', 'info')
 
     # redirect to the login page
     return redirect(url_for('auth.login'))

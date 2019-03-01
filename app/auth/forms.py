@@ -4,10 +4,10 @@ from wtforms.validators import DataRequired, Email, EqualTo
 
 from ..models import User
 
-
 class RegistrationForm(FlaskForm):
     """
     Form for users to create new account
+    wtforms will create the forms
     """
     email = StringField('Email', validators=[DataRequired(), Email()])
     first_name = StringField('First Name', validators=[DataRequired()])
@@ -19,6 +19,7 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password')
     submit = SubmitField('Register')
 
+    # Check if email is already in use first
     # USE SQL COMMANDS FOR QUERY
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
@@ -28,6 +29,7 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     """
     Form for users to login
+    wtforms will create the forms
     """
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
