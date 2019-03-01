@@ -15,7 +15,10 @@ class Book(db.Model):
     title = db.Column(db.String, nullable=False)
     author = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
-    reviews = db.relationship("Users", backref="books", lazy=True)
+    user_reviews = db.relationship("Users", backref="books", lazy=True)
+
+    def __repr__(self):
+        return '<Book: {}>'.format(self.isbn)
 
 
 class User(UserMixin, db.Model):
@@ -25,7 +28,6 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(55), index=True, unique=True, nullable=False)
     username = db.Column(db.String(30), index=True, unique=True, nullable=False)
     first_name = db.Column(db.String(30), index=True, nullable=False)
     last_name = db.Column(db.String(30), index=True, nullable=False)
