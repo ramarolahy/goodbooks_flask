@@ -4,3 +4,5 @@ psycopg2
 SQLAlchemy
 flask-login
 flask-migrate
+psycopg2-binary
+Flask-WTF

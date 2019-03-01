@@ -1,38 +1,45 @@
-# Third party imports
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-# Local imports
-from application import db
+
+from app import db, login_manager
 
 
 class Book(db.Model):
     """
-    CREATE A BOOKS TABLE
+    Create a Book table
     """
-    __tablename__ = "books"
+    # Ensures table will be named in plural and not in singular
+    # as is the name of the model
+    __tablename__ = 'books'
 
-    isbn = db.Column(db.Integer, unique=True, nullable=False)
-    title = db.Column(db.String, nullable=False)
-    author = db.Column(db.String, nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    user_reviews = db.relationship("Users", backref="books", lazy=True)
+    id = db.Column(db.Integer, primary_key=True)
+    isbn = db.Column(db.String(60), index=True, unique=True, nullable=False)
+    title = db.Column(db.String(60), index=True, nullable=False)
+    author = db.Column(db.String(60), index=True, nullable=False)
+    year = db.Column(db.String(4), nullable=False)
+    user_reviews = db.relationship('User', backref='book', lazy='dynamic')
+
 
     def __repr__(self):
         return '<Book: {}>'.format(self.isbn)
 
 
+
 class User(UserMixin, db.Model):
     """
-    CREATE AN EMPLOYEE TABLE
+    Create an User table
     """
-    __tablename__ = "users"
+
+    # Ensures table will be named in plural and not in singular
+    # as is the name of the model
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), index=True, unique=True, nullable=False)
-    first_name = db.Column(db.String(30), index=True, nullable=False)
-    last_name = db.Column(db.String(30), index=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-    books_reviewed = db.Column(db.Integer, db.ForeignKey('books.isbn'), unique=True)
+    username = db.Column(db.String(60), index=True, unique=True)
+    first_name = db.Column(db.String(60), index=True)
+    last_name = db.Column(db.String(60), index=True)
+    password_hash = db.Column(db.String(128))
+    books_reviewed = db.Column(db.String(20), db.ForeignKey('books.isbn'))
 
     @property
     def password(self):
@@ -61,4 +68,3 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User: {}>'.format(self.username)
-
