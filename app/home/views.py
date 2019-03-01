@@ -5,6 +5,8 @@ from jinja2 import TemplateNotFound
 from . import home
 
 
+# Homepage route
+# ===============================================
 @home.route('/')
 def homepage():
     """
@@ -19,6 +21,9 @@ def homepage():
     except TemplateNotFound:
         abort(404)
 
+
+# Profile page route
+# ===============================================
 @home.route('/profile')
 @login_required
 def profile():
@@ -33,11 +38,14 @@ def profile():
     try:
         return render_template('home/profile.html', title="My Books")
     except TemplateNotFound:
-        abort()
+        abort(401)
 
+
+# Book page route
+# ===============================================
 @home.route('/book/<string:isbn>')
 def book():
     """
-    Render the dashboard template on the /book/isbn route
+    Render the book template on the /book/isbn route
     """
     return render_template('home/book.html', title="Book")

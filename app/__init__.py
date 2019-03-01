@@ -13,7 +13,7 @@ login_manager = LoginManager()
 
 def create_app(config_name):
     # Create and initialize Flask app
-    # config.py is locate with iinstance_relative_config
+    # config.py is locate with instance_relative_config
     app = Flask(__name__, instance_relative_config=True)
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config.from_object(app_config[config_name])
