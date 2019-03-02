@@ -27,9 +27,10 @@ def searchResults(category, value):
         return render_template('home/profile.html', form=form, results=results)
 
 
-def createReview(book_isbn, user_id, rating, text):
+def createReview(review_date, book_isbn, user_id, rating, text):
 
-    review = Review(book_isbn=book_isbn,
+    review = Review(review_date=review_date,
+                    book_isbn=book_isbn,
                     user_id=user_id,
                     rating=rating,
                     review_text=text
@@ -84,7 +85,7 @@ def book(isbn):
     Render the book template on the /book/isbn route
     """
     # get book reviews
-    reviews = Review.query.filter_by(isbn=isbn).all()
+    reviews = Review.query.filter_by(book_isbn=isbn).all()
 
     # Check if current user  already submitted a review
 
@@ -97,12 +98,16 @@ def book(isbn):
 
     reviewForm = ReviewForm()
     if reviewForm.validate_on_submit():
+        review_date=datetime.now()
         book_isbn=isbn
+
         if current_user.is_authenticated:
             user_id = current_user.id
+        else:
+            redirect('/login')
         rating = reviewForm.rating.data
         text = reviewForm.review.data
-        createReview(book_isbn, user_id, rating, text)
+        createReview(review_date, book_isbn, user_id, rating, text)
 
     book = Book.query.filter_by(isbn=isbn).first()
     return render_template('home/book.html', title="Book", book=book, reviews=reviews, searchform=searchform, reviewForm=reviewForm)
