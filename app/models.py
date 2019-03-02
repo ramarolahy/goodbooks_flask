@@ -1,4 +1,5 @@
 from flask_login import UserMixin
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
@@ -17,12 +18,28 @@ class Book(db.Model):
     title = db.Column(db.String(60), index=True, nullable=False)
     author = db.Column(db.String(60), index=True, nullable=False)
     year = db.Column(db.String(4), nullable=False)
-    user_reviews = db.relationship('User', backref='book', lazy='dynamic')
+    user_reviews = db.relationship('Review', backref='book', lazy='dynamic')
 
 
     def __repr__(self):
         return '<Book: {}>'.format(self.isbn)
 
+
+class Review(db.Model):
+    """
+    Create a Review table
+    """
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    review_date = db.Column(db.DateTime, nullable=False)
+    book_isbn = db.Column(db.String(60), db.ForeignKey('books.isbn'), index=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    rating = db.Column(db.String(1), nullable=False)
+    review_text = db.Column(db.String(), nullable=False)
+
+    def __repr__(self):
+        return '<Review: {}>'.format(self.book_isbn)
 
 
 class User(UserMixin, db.Model):
@@ -43,7 +60,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(60), index=True)
     last_name = db.Column(db.String(60), index=True)
     password_hash = db.Column(db.String(128))
-    books_reviewed = db.Column(db.String(20), db.ForeignKey('books.isbn'))
+    books_reviewed = db.relationship('Review', backref='user', lazy='dynamic')
 
     @property
     def password(self):

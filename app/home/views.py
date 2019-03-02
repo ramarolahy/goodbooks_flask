@@ -1,33 +1,43 @@
-from flask import render_template, abort, request, flash, redirect
-from flask_login import login_required
-from jinja2 import TemplateNotFound
+from flask import render_template, request, redirect, url_for
+from flask_login import login_required, current_user
 
-
-from .forms import BookSearchForm
+from .forms import BookSearchForm, ReviewForm
 from . import home
 from ..models import *
 
 
-def search_results(category, value):
+def searchResults(category, value):
     """
     Function to search for books
-    :return: render results.html
+    :return: render profile.html
     """
     form = BookSearchForm()
     results = []
     # books = Book.query.all()
-    if category == 'ISBN':
+    if category == 'isbn':
         results = Book.query.filter(Book.isbn.contains(value)).all()
-    if category == 'Author':
+    if category == 'author':
         results = Book.query.filter(Book.author.contains(value)).all()
-    if category == 'Title':
+    if category == 'title':
         results = Book.query.filter(Book.title.contains(value)).all()
 
     if not results:
-        flash('No results found!', 'warning')
         return redirect('/profile')
     else:
         return render_template('home/profile.html', form=form, results=results)
+
+
+def createReview(book_isbn, user_id, rating, text):
+
+    review = Review(book_isbn=book_isbn,
+                    user_id=user_id,
+                    rating=rating,
+                    review_text=text
+                )
+    # Add the review to database
+    db.session.add(review)
+    db.session.commit()
+
 
 # Homepage route
 # ===============================================
@@ -41,6 +51,7 @@ def homepage():
         - Search books, view info and reviews
     """
     return render_template('home/index.html', title="Welcome")
+
 
 # Profile page route
 # ===============================================
@@ -60,9 +71,10 @@ def profile():
     if form.validate_on_submit():
         category = form.select.data
         value = form.search.data
-        return search_results(category, value)
+        return searchResults(category, value)
+    else:
+        return render_template('home/profile.html', title="My Books", form=form)
 
-    return render_template('home/profile.html', title="My Books", form=form)
 
 # Book page route
 # ===============================================
@@ -71,11 +83,26 @@ def book(isbn):
     """
     Render the book template on the /book/isbn route
     """
-    form = BookSearchForm()
-    if form.validate_on_submit():
-        category = form.select.data
-        value = form.search.data
-        return search_results(category, value)
+    # get book reviews
+    reviews = Review.query.filter_by(isbn=isbn).all()
+
+    # Check if current user  already submitted a review
+
+
+    searchform = BookSearchForm()
+    if searchform.validate_on_submit():
+        category = searchform.select.data
+        value = searchform.search.data
+        return searchResults(category, value)
+
+    reviewForm = ReviewForm()
+    if reviewForm.validate_on_submit():
+        book_isbn=isbn
+        if current_user.is_authenticated:
+            user_id = current_user.id
+        rating = reviewForm.rating.data
+        text = reviewForm.review.data
+        createReview(book_isbn, user_id, rating, text)
 
     book = Book.query.filter_by(isbn=isbn).first()
-    return render_template('home/book.html', title="Book", book=book, form=form)
+    return render_template('home/book.html', title="Book", book=book, reviews=reviews, searchform=searchform, reviewForm=reviewForm)

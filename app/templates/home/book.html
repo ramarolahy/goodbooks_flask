@@ -1,20 +1,23 @@
 {%  extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+
 {% block title %}Profile{% endblock %}
+
 {% block header %}
 {% include './includes/navbar.html' %}
 {% endblock %}
+
 {% block body %}
 <div class="intro-header">
     <div class="container">
         <div class="row">
-            <div class="card col-lg-12 bg-white">
-                <div class="profile-message">
+            <div class="card text-center py-5 mb-3 col-lg-12 bg-white">
+                <div>
                     <h1>GoodBooks from GoodReads</h1>
                     <blockquote class="quote__profile" cite="https://www.goodreads.com/quotes">
                         “So many books, so little time.” ― <b>Frank Zappa</b>
                     </blockquote>
-                    <hr class="intro-divider">
+                    <hr style="width: 50%">
                     </ul>
                 </div>
             </div>
@@ -23,27 +26,53 @@
             <div class=" card col-lg-12 bg-white">
                 <form class="form-inline py-3" method="POST" role="form">
                     <div class="mx-2">
-                        {{ form.hidden_tag() }}
-                        {{ wtf.form_errors(form, hiddens="only") }}
+                        {{ searchform.hidden_tag() }}
+                        {{ wtf.form_errors(searchform, hiddens="only") }}
                     </div>
                     <div class="mx-2">
-                        {{ wtf.form_field(form.select)}}
+                        {{ wtf.form_field(searchform.select)}}
                     </div>
                     <div class="mx-2">
-                        {{ wtf.form_field(form.search)}}
+                        {{ wtf.form_field(searchform.search)}}
                     </div>
                     <div class="mx-2">
-                        {{ wtf.form_field(form.submit)}}
+                        {{ wtf.form_field(searchform.submit)}}
                     </div>
                 </form>
             </div>
         </div>
         <div class="row d-flex justify-content-around pt-4">
-                <div class="card py-2 px-3 mx-3 my-1" style="width: 15em">
-                    <b>isbn: </b>{{ book.isbn }}
-                    <b>Title: </b>{{ book.title }}
-                    <b>Author: </b>{{ book.author }}
+            <div class="container__book--info card col-lg-12 py-3 px-3 mx-3 my-3">
+                <!--<img class="card-img-top mb-3" src="{{ url_for('static', filename='img/books.jpeg') }}"-->
+                <!--style="clip: rect(0, 100%, 200px, 0);" alt="Card image cap">-->
+                <div class="image__book mb-3"
+                     style="background-image:url({{ url_for('static', filename='img/books.jpeg') }})"></div>
+                <div class="px-5">
+                    <h1 class="book__info--title">{{ book.title }}</h1>
+                    <h3 class="book__info--author">by <b>{{ book.author }}</b></h3>
+                    <br>
+                    <h4 class="book__info--isbn float-right">isbn: {{ book.isbn }}</h4>
+                    <hr class=" my-5" style="width: 80%">
                 </div>
+                <div class="px-5 pb-5">
+                    <form method="POST" role="form">
+                        <div>
+                            {{ reviewForm.hidden_tag() }}
+                            {{ wtf.form_errors(reviewForm, hiddens="only") }}
+                        </div>
+                        <div>
+                            {{ wtf.form_field(reviewForm.rating)}}
+                        </div>
+                        <div>
+                            {{ wtf.form_field(reviewForm.review)}}
+                        </div>
+                        <div>
+                            {{ wtf.form_field(reviewForm.submit)}}
+                        </div>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
