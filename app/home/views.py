@@ -1,9 +1,33 @@
-from flask import render_template, abort
+from flask import render_template, abort, request, flash, redirect
 from flask_login import login_required
 from jinja2 import TemplateNotFound
 
-from . import home
 
+from .forms import BookSearchForm
+from . import home
+from ..models import *
+
+
+def search_results(category, value):
+    """
+    Function to search for books
+    :return: render results.html
+    """
+    form = BookSearchForm()
+    results = []
+    # books = Book.query.all()
+    if category == 'ISBN':
+        results = Book.query.filter(Book.isbn.contains(value)).all()
+    if category == 'Author':
+        results = Book.query.filter(Book.author.contains(value)).all()
+    if category == 'Title':
+        results = Book.query.filter(Book.title.contains(value)).all()
+
+    if not results:
+        flash('No results found!', 'warning')
+        return redirect('/profile')
+    else:
+        return render_template('home/profile.html', form=form, results=results)
 
 # Homepage route
 # ===============================================
@@ -16,15 +40,11 @@ def homepage():
         - View lists of books
         - Search books, view info and reviews
     """
-    try:
-        return render_template('home/index.html', title="Welcome")
-    except TemplateNotFound:
-        abort(404)
-
+    return render_template('home/index.html', title="Welcome")
 
 # Profile page route
 # ===============================================
-@home.route('/profile')
+@home.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     """
@@ -35,17 +55,27 @@ def profile():
         - Search books and view info and reviews
         - Rate and review books
     """
-    try:
-        return render_template('home/profile.html', title="My Books")
-    except TemplateNotFound:
-        abort(401)
+    form = BookSearchForm()
 
+    if form.validate_on_submit():
+        category = form.select.data
+        value = form.search.data
+        return search_results(category, value)
+
+    return render_template('home/profile.html', title="My Books", form=form)
 
 # Book page route
 # ===============================================
-@home.route('/book/<string:isbn>')
-def book():
+@home.route('/book/<string:isbn>', methods=['GET', 'POST'])
+def book(isbn):
     """
     Render the book template on the /book/isbn route
     """
-    return render_template('home/book.html', title="Book")
+    form = BookSearchForm()
+    if form.validate_on_submit():
+        category = form.select.data
+        value = form.search.data
+        return search_results(category, value)
+
+    book = Book.query.filter_by(isbn=isbn).first()
+    return render_template('home/book.html', title="Book", book=book, form=form)

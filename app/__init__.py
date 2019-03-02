@@ -1,4 +1,5 @@
 # third-party imports
+import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -44,3 +45,7 @@ def create_app(config_name):
     app.register_blueprint(home_blueprint)
 
     return app
+
+
+sqla_logger = logging.getLogger('sqlalchemy')
+sqla_logger.propagate = False

@@ -9,3 +9,4 @@ Flask-WTF
 wtforms
 is-safe-url
 flask-bootstrap
+requests

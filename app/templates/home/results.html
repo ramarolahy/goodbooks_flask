@@ -1,5 +1,6 @@
-{%  extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{%  extends "base.html" %}
+
 {% block title %}Profile{% endblock %}
 {% block header %}
 {% include './includes/navbar.html' %}
@@ -40,7 +41,7 @@
         </div>
         <div class="row d-flex justify-content-around pt-4">
             {% for book in results %}
-            <a href="{{ url_for('home.book', isbn=['{{book.isbn}}'])}}" style="text-decoration: none">
+            <a href="#" style="text-decoration: none">
                 <div class="card py-2 px-3 mx-3 my-1" style="width: 15em">
                     <b>isbn: </b>{{ book.isbn }}
                     <b>Title: </b>{{ book.title }}
@@ -52,3 +53,4 @@
     </div>
 </div>
 {% endblock %}
+
