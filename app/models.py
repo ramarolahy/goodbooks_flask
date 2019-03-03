@@ -13,7 +13,7 @@ from app import db, login_manager
 """
 association_table = db.Table('association',
                         db.Column('reader_id', db.Integer, db.ForeignKey('readers.id')),
-                        db.Column('book_id', db.Integer, db.ForeignKey('books.id'))
+                        db.Column('book_isbn', db.String(20), db.ForeignKey('books.isbn'))
                              )
 
 class Reader(UserMixin, db.Model):
@@ -111,7 +111,7 @@ class Review(db.Model):
     rating = db.Column(db.String(1), nullable=False)
     review_title = db.Column(db.String(), nullable=True)
     review_text = db.Column(db.String(), nullable=False)
-    book_isbn = db.Column(db.String(60), db.ForeignKey('books.isbn'), index=True, nullable=False)
+    book_isbn = db.Column(db.String(20), db.ForeignKey('books.isbn'), index=True, nullable=False)
     reader_id = db.Column(db.Integer, db.ForeignKey('readers.id'), unique=True, nullable=False)
 
 

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e26ecd6e0544
+Revision ID: b6588f7dea0a
 Revises: 
-Create Date: 2019-03-03 12:44:33.503213
+Create Date: 2019-03-03 14:42:03.249888
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e26ecd6e0544'
+revision = 'b6588f7dea0a'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -42,8 +42,8 @@ def upgrade():
     op.create_index(op.f('ix_readers_last_name'), 'readers', ['last_name'], unique=False)
     op.create_table('association',
     sa.Column('reader_id', sa.Integer(), nullable=True),
-    sa.Column('book_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['book_id'], ['books.id'], ),
+    sa.Column('book_isbn', sa.String(length=20), nullable=True),
+    sa.ForeignKeyConstraint(['book_isbn'], ['books.isbn'], ),
     sa.ForeignKeyConstraint(['reader_id'], ['readers.id'], )
     )
     op.create_table('reviews',
@@ -52,7 +52,7 @@ def upgrade():
     sa.Column('rating', sa.String(length=1), nullable=False),
     sa.Column('review_title', sa.String(), nullable=True),
     sa.Column('review_text', sa.String(), nullable=False),
-    sa.Column('book_isbn', sa.String(length=60), nullable=False),
+    sa.Column('book_isbn', sa.String(length=20), nullable=False),
     sa.Column('reader_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['book_isbn'], ['books.isbn'], ),
     sa.ForeignKeyConstraint(['reader_id'], ['readers.id'], ),

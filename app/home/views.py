@@ -30,25 +30,6 @@ def searchResults(category, value):
 
 
 
-def createReview(review_date, book_isbn, reader_id, rating, title, text):
-    book = Book()
-    reader = Reader()
-    review = Review(review_date=review_date,
-                    book_isbn=book_isbn,
-                    reader_id=reader_id,
-                    rating=rating,
-                    review_title=title,
-                    review_text=text
-                    )
-    # Add the review to database
-    db.session.add(review)
-    reader.books_reviewed.append(book)
-    db.session.add(reader)
-    db.session.commit()
-    redirect('/book/<string:isbn>')
-
-
-
 # Homepage route
 # ===============================================
 @home.route('/')
@@ -112,6 +93,26 @@ def results(category, filter):
         return results
     else:
         return render_template('home/results.html', title="My Books", form=form, results=results)
+
+
+def createReview(review_date, book_isbn, reader_id, rating, title, text):
+    review = Review(review_date=review_date,
+                    book_isbn=book_isbn,
+                    reader_id=reader_id,
+                    rating=rating,
+                    review_title=title,
+                    review_text=text
+                    )
+    # get the book being reviewed
+    reviewed_book = Book.query.filter_by(isbn=book_isbn).first()
+    # Add the review to database
+    db.session.add(review)
+    # add the book to the current_user's books_reviewed (association_table)
+    current_user.books_reviewed.append(reviewed_book)
+    db.session.commit()
+
+    redirect('/book/<string:isbn>')
+
 
 # Book page route
 # ===============================================
