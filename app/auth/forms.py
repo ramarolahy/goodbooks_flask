@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, SubmitField, ValidationError
 from wtforms.validators import DataRequired, Email, EqualTo
 
-from ..models import User
+from ..models import Reader
 
 class RegistrationForm(FlaskForm):
     """
@@ -22,7 +22,7 @@ class RegistrationForm(FlaskForm):
     # Check if email is already in use first
     # USE SQL COMMANDS FOR QUERY
     def validate_email(self, field):
-        if User.query.filter_by(email=field.data).first():
+        if Reader.query.filter_by(email=field.data).first():
             raise ValidationError('Email is already in use.')
 
 

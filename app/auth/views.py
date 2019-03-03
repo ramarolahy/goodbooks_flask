@@ -1,9 +1,10 @@
 
 from flask import flash, redirect, render_template, url_for
 from flask_login import login_required, login_user, logout_user
+from datetime import timedelta
 
 from .forms import LoginForm, RegistrationForm
-from ..models import User
+from ..models import Reader
 from . import auth
 from .. import db
 
@@ -20,13 +21,13 @@ def register():
     #
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data,
+        reader = Reader(email=form.email.data,
                     first_name=form.first_name.data,
                     last_name=form.last_name.data,
                     password=form.password.data)
 
-        # add user to the database
-        db.session.add(user)
+        # add reader to the database
+        db.session.add(reader)
         db.session.commit()
         flash('You have successfully registered! You may now login.')
 
@@ -43,24 +44,22 @@ def register():
 def login():
     """
     Handle requests to the /login route
-    Log an user in through the login form
+    Log a reader in through the login form
     """
     form = LoginForm()
     if form.validate_on_submit():
 
-        # check whether user exists in the database and whether
+        # check whether reader exists in the database and whether
         # the password entered matches the password in the database
-        user = User.query.filter_by(email=form.email.data).first()
-        if user is not None and user.verify_password(
+        reader = Reader.query.filter_by(email=form.email.data).first()
+        if reader is not None and reader.verify_password(
                 form.password.data):
-            # Login and validate the user.
-            # user should be an instance of your `User` class
-            login_user(user)
-
-            flash('You are logged in!', 'info')
+            # Login and validate the reader.
+            # reader should be an instance of your `User` class
+            login_user(reader, remember=True, duration=timedelta(seconds=1800))
 
             # redirect to the profile page after login
-            return redirect(url_for('home.profile'))
+            return redirect(url_for('home.profile', reader=reader.first_name ))
 
         # when login details are incorrect
         else:
@@ -77,10 +76,9 @@ def login():
 def logout():
     """
     Handle requests to the /logout route
-    Log an user out through the logout link
+    Log an reader out through the logout link
     """
     logout_user()
-    flash('You have successfully been logged out.', 'info')
 
     # redirect to the login page
     return redirect(url_for('auth.login'))

@@ -54,33 +54,81 @@
                     <hr class=" my-5" style="width: 80%">
                 </div>
                 <div class="px-5 pb-5">
-                    <!--Review Form-->
-                    <form method="POST" role="form">
-                        <div>
-                            {{ reviewForm.hidden_tag() }}
-                            {{ wtf.form_errors(reviewForm, hiddens="only") }}
-                        </div>
-                        <div>
-                            {{ wtf.form_field(reviewForm.rating)}}
-                        </div>
-                        <div>
-                            {{ wtf.form_field(reviewForm.review)}}
-                        </div>
-                        <div>
-                            {{ wtf.form_field(reviewForm.submit)}}
-                        </div>
-                    </form>
-                    <ul>
-                        {% for user in users %}
-                            {% for review in reviews %}
-                                {% if user.id == review.user_id%}
-                                    <li>{{user.first_name}}: {{ review.review_text }}</li>
-                                {% endif %}
-                            {% endfor %}
+                    {% if didReview == None %}
+                        <!--Paste Review Form if current_user did not submit review on the book yet-->
+                        <form method="POST" role="form">
+                            <div>
+                                {{ reviewForm.hidden_tag() }}
+                                {{ wtf.form_errors(reviewForm, hiddens="only") }}
+                            </div>
+                            <div>
+                                {{ wtf.form_field(reviewForm.rating)}}
+                            </div>
+                            <div>
+                                {{ wtf.form_field(reviewForm.title)}}
+                            </div>
+                            <div>
+                                {{ wtf.form_field(reviewForm.review)}}
+                            </div>
+                            <div>
+                                {{ wtf.form_field(reviewForm.submit)}}
+                            </div>
+                        </form>
+                    {% else %}
+                        <!-- Paste current_user Review-->
+                        {% for review in reviews %}
+                            {% if current_user.id == review.reader_id%}
+                                <div class="card">
+                                    <div class="card-header text-white bg-success py-2 clearfix">
+                                        <h5 class="float-left">Thank you for you your review
+                                            <b>{{current_user.first_name}}</b>!</h5>
+                                        <span class="float-right">Date: {{ review.review_date }}</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ review.review_title}}</h5>
+                                        <p class="card-text">{{ review.review_text }}</p>
+                                        <div class="float-right py-0 my-0">
+                                            <a href="#" class="btn btn-primary btn__delete">Delete</a>
+                                            <a href="#" class="btn btn-primary btn__edit">Edit</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
-                    </ul>
+                    {% endif %}
 
+                    {% if reviews|length == 0 %}
+                        <div class="card text-white bg-warning py-0 mt-4 mb-3">
+                            <div class="card-header">
+                                <h5>No submitted reviews yet</h5>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="card text-white bg-info py-0 mt-4 mb-3">
+                            <div class="card-header">
+                                <h4>Other submitted reviews</h4>
+                            </div>
+                        </div>
+                    {% endif %}
 
+                    <!-- List all other submited reviews-->
+                    {% for reader in readers %}
+                        {% for review in reviews %}
+                            {% if reader.id == review.reader_id%}
+                                <div class="card my-2">
+                                    <div class="card-header py-2 clearfix">
+                                        <h5 class="float-left">Title: {{ review.review_title}}</h5>
+                                        <span class="float-right">Date: {{ review.review_date }}</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="card-title">Reviewed by {{reader.first_name}}</h6>
+                                        <p class="card-text">{{ review.review_text }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
                 </div>
 
             </div>

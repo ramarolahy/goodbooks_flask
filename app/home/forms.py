@@ -23,5 +23,6 @@ class ReviewForm(FlaskForm):
     """
     rating = SelectField('Select your rating:&nbsp;&nbsp;&nbsp;',
                         choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')], validators=[DataRequired()])
+    title = StringField('Title', validators=[DataRequired()])
     review = TextAreaField('Enter your review', validators=[DataRequired()])
     submit = SubmitField('Submit Review')

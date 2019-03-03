@@ -11,6 +11,17 @@
     width: 10em;
 }
 
+.btn__delete {
+    border: none;
+    background-color: #f24846;
+    color: white;
+}
+.btn__edit {
+    border: none;
+    background-color: #609dce;
+    color: white;
+}
+
 a.book__info {
     color: black;
 
