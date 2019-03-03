@@ -17,7 +17,8 @@
                      style="background-image:url({{ url_for('static', filename='img/books.jpeg') }})"></div>
                 <div class="px-5">
                     <h1 class="book__info--title">{{ book.title }}</h1>
-                    <h3 class="book__info--author">by <b>{{ book.author }}</b></h3>
+                    <h3 class="book__info--author">by <b>{{ book.author }}</b></h3><br>
+                    <span>Published in:&nbsp;<b>{{ book.year }}</b></span>
                     <br>
                     <h4 class="book__info--isbn float-right">isbn: {{ book.isbn }}</h4>
                     <hr class=" my-5" style="width: 80%">
