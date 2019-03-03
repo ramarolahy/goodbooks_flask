@@ -10,38 +10,7 @@
 {% block body %}
 <div class="intro-header">
     <div class="container">
-        <div class="row">
-            <div class="card text-center py-5 mb-3 col-lg-12 bg-white">
-                <div>
-                    <h1>GoodBooks from GoodReads</h1>
-                    <blockquote class="quote__profile" cite="https://www.goodreads.com/quotes">
-                        “So many books, so little time.” ― <b>Frank Zappa</b>
-                    </blockquote>
-                    <hr style="width: 50%">
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class=" card col-lg-12 bg-white">
-                <!--Search form-->
-                <form class="form-inline py-3" method="POST" role="form">
-                    <div class="mx-2">
-                        {{ searchform.hidden_tag() }}
-                        {{ wtf.form_errors(searchform, hiddens="only") }}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(searchform.select)}}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(searchform.search)}}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(searchform.submit)}}
-                    </div>
-                </form>
-            </div>
-        </div>
+        {% include './includes/banner.html' %}
         <div class="row d-flex justify-content-around pt-4">
             <div class="container__book--info card col-lg-12 py-3 px-3 mx-3 my-3">
                 <div class="image__book mb-3"

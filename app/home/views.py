@@ -6,29 +6,6 @@ from . import home
 from ..models import *
 
 
-def searchResults(category, value):
-    """
-    Function to search for books
-    :return: render profile.html
-    """
-    form = BookSearchForm()
-    results = []
-
-    if category == 'isbn':
-        results = Book.query.filter(Book.isbn.contains(value)).all()
-    if category == 'author':
-        results = Book.query.filter(Book.author.contains(value)).all()
-    if category == 'title':
-        results = Book.query.filter(Book.title.contains(value)).all()
-
-    if not results:
-        #flash('No books where found!', 'warning')
-        return redirect(url_for('home.profile', reader=current_user.first_name))
-
-    else:
-        return render_template('home/results.html', form=form, results=results)
-
-
 
 # Homepage route
 # ===============================================
@@ -59,23 +36,20 @@ def profile(reader):
     """
     # On first load, display default results
     reviews = Review.query.filter_by(reader_id=current_user.id).all()
-    #booksReviewed = Book.query.join(Book.user_reviews, Book.users).filter_by(user.id=current_user.id).all()
+    booksReviewed = current_user.books_reviewed
 
-    form = BookSearchForm()
-    if form.validate_on_submit():
-        category = form.select.data
-        filter = form.search.data
-        results = searchResults(category, filter)
-        return results
-    else:
-        return render_template('home/profile.html', title="My Books", form=form, reviews=reviews)
+    return render_template('home/profile.html', title="My Books", reviews=reviews, booksReviewed=booksReviewed)
+
+
+
+    #redirect(url_for('home.results', category=category, filter=filter, results=results))
 
 
 # Profile page route
 # ===============================================
-@home.route('/results/<string:category><string:filter>', methods=['GET', 'POST'])
+@home.route('/results/', methods=['GET', 'POST'])
 @login_required
-def results(category, filter):
+def results():
     """
     Render the profile template on the /profile route
     Users must be logged in to view profile
@@ -84,15 +58,22 @@ def results(category, filter):
         - Search books and view info and reviews
         - Rate and review books
     """
-    results = []
+    results = Book.query.all()
+
+    def searchResults(category, filter):
+        if category == 'isbn':
+            results = Book.query.filter(Book.isbn.contains(filter)).all()
+        if category == 'author':
+            results = Book.query.filter(Book.author.contains(filter)).all()
+        if category == 'title':
+            results = Book.query.filter(Book.title.contains(filter)).all()
+        return results
+
     form = BookSearchForm()
     if form.validate_on_submit():
-        category = form.select.data
-        filter = form.search.data
-        results = searchResults(category, filter)
-        return results
-    else:
-        return render_template('home/results.html', title="My Books", form=form, results=results)
+        results =searchResults(form.select.data, form.search.data)
+
+    return render_template('home/results.html', title="My Books", form=form, results=results)
 
 
 def createReview(review_date, book_isbn, reader_id, rating, title, text):
@@ -111,7 +92,6 @@ def createReview(review_date, book_isbn, reader_id, rating, title, text):
     current_user.books_reviewed.append(reviewed_book)
     db.session.commit()
 
-    redirect('/book/<string:isbn>')
 
 
 # Book page route
@@ -133,11 +113,7 @@ def book(isbn):
     didReview = Review.query.filter_by(book_isbn=isbn, reader_id=current_user.id).one_or_none()
     book = Book.query.filter_by(isbn=isbn).first()
 
-    searchform = BookSearchForm()
-    if searchform.validate_on_submit():
-        category = searchform.select.data
-        value = searchform.search.data
-        return searchResults(category, value)
+
 
     reviewForm = ReviewForm()
     if reviewForm.validate_on_submit():
@@ -148,7 +124,8 @@ def book(isbn):
         title = reviewForm.title.data
         text = reviewForm.review.data
         createReview(review_date, book_isbn, reader_id, rating, title, text)
+        return redirect(url_for('home.profile', reader=current_user.first_name))
 
     return render_template('home/book.html', title="Book", book=book, reviews=reviews,
-                           searchform=searchform, reviewForm=reviewForm, readers=readers, didReview=didReview
+                            reviewForm=reviewForm, readers=readers, didReview=didReview
                            )

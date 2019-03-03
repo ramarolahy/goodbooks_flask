@@ -15,6 +15,10 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ url_for('home.profile', reader='current_user.first_name') }}">Home</a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link"
+                           href="{{ url_for('home.results') }}">Search books</a>
+                    </li>
                     {% if current_user.is_authenticated %}
                     <li><a class="nav-link" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i>
                         Logout</a></li>
