@@ -1,3 +1,4 @@
+
 from flask import render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 
@@ -86,9 +87,8 @@ def book(isbn):
     """
     # get book reviews
     reviews = Review.query.filter_by(book_isbn=isbn).all()
-
-    # Check if current user  already submitted a review
-
+    # Still trying to figure out relationships and foreignkeys so this is just a workaround
+    users = User.query.all()
 
     searchform = BookSearchForm()
     if searchform.validate_on_submit():
@@ -110,4 +110,8 @@ def book(isbn):
         createReview(review_date, book_isbn, user_id, rating, text)
 
     book = Book.query.filter_by(isbn=isbn).first()
-    return render_template('home/book.html', title="Book", book=book, reviews=reviews, searchform=searchform, reviewForm=reviewForm)
+    return render_template('home/book.html',
+                           title="Book", book=book, reviews=reviews,
+                           searchform=searchform, reviewForm=reviewForm,
+                           users=users
+                           )

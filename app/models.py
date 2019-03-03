@@ -37,6 +37,7 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
     rating = db.Column(db.String(1), nullable=False)
     review_text = db.Column(db.String(), nullable=False)
+    users = db.relationship('User', backref='review', lazy=True)
 
     def __repr__(self):
         return '<Review: {}>'.format(self.book_isbn)
@@ -60,7 +61,7 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(60), index=True)
     last_name = db.Column(db.String(60), index=True)
     password_hash = db.Column(db.String(128))
-    books_reviewed = db.relationship('Review', backref='user', lazy='dynamic')
+    books_reviewed = db.relationship('Review', backref='user', lazy=True)
 
     @property
     def password(self):
