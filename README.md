@@ -93,9 +93,38 @@ project1-ramarolahy
 
 # Database Structure
 
+|   TABLE	|   READER	|   BOOK	|   REVIEWS	|
+|---	    |---	    |---	    |---    	|
+|   READER	|     --   	|    M-M    |    O-M  	|
+|   BOOK	|    M-M    |     --	|    O-M  	|
+|   REVIEWS	|    O-M  	|    O-M  	|     --  	|
+
+**BOOK**
+|   ID	|   isbn	|   title	|   author	|   year	|
+
+**READER**
+|   ID	|   email	|   first_name	|   last_name	|   password_hash	|
+
+**REVIEWS**
+|   ID	|   review_date	|   rating	|   review_title	|   review_text	|   book_isbn fk	|   reader_id fk	|
+
+**ASSOCIATION**
+|   reader_id fk	|   book_isbn fk	|
 
 # Packages Used
-
+See requirements.txt
 
 # Other Notes
- 
+My search feature started acting strange last minute after I did some refactoring. It worked before but now it seems to 
+split the search term in to characters and finds all matching results.
+
+I did get time to refactor the search commands to core SQL. Implementing the app with SQLAlchemy allowed me to work faster
+and I was planning on refactoring later but ran out of time.
+
+**Active users:**
+User1
+    email: user1@test.com
+    pw: pass1
+User2
+    email: user2@test.com
+    pw: pass2
