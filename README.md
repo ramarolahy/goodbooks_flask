@@ -96,7 +96,7 @@ I added a feature where readers can see all books they reviewed on their profile
 
 On the book page view, the review submitted by the reader will be displayed at the very top.
 
-I did get time to refactor the search commands to core SQL. Implementing the app with SQLAlchemy allowed me to work faster
+I did not get time to refactor the search commands to core SQL. Implementing the app with SQLAlchemy allowed me to work faster
 and I was planning on refactoring later but ran out of time.
 
 **Active users:**
