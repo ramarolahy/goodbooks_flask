@@ -55,7 +55,7 @@
                                     <div class="card-header text-white bg-success py-2 clearfix">
                                         <h5 class="float-left">Thank you for you your review
                                             <b>{{current_user.first_name}}</b>!</h5>
-                                        <span class="float-right">Date: {{ review.review_date }}</span>
+                                        <span class="float-right">{{ review.review_date.strftime('%m-%d-%Y %I:%M')  }}</span>
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ review.review_title}}</h5>
@@ -91,8 +91,8 @@
                             {% if reader.id == review.reader_id%}
                                 <div class="card my-2">
                                     <div class="card-header py-2 clearfix">
-                                        <h5 class="float-left">Title: {{ review.review_title}}</h5>
-                                        <span class="float-right">Date: {{ review.review_date }}</span>
+                                        <h5 class="float-left">{{ review.review_title}}</h5>
+                                        <span class="float-right">{{ review.review_date.strftime('%m-%d-%Y %I:%M') }}</span>
                                     </div>
                                     <div class="card-body">
                                         <h6 class="card-title">Reviewed by {{reader.first_name}}</h6>
