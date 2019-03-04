@@ -15,6 +15,7 @@
 + https://flask-wtf.readthedocs.io/en/stable/quickstart.html
 + https://pythonhosted.org/Flask-Bootstrap/
 + https://wtforms.readthedocs.io/en/latest/index.html
++ https://stackoverflow.com/questions/19699059/representing-directory-file-structure-in-markdown-syntax
 
 # Website requirements
 + **Registration**: Users should be able to register for your website, providing (at minimum) a username and password.
@@ -45,7 +46,50 @@ If you’ve added any Python packages that need to be installed in order to run 
 Beyond these requirements, the design, look, and feel of the website are up to you! You’re also welcome to add additional features to your website, so long as you meet the requirements laid out in the above specification!
 
 # Website Structure
-
+```markdown
+project1-ramarolahy
+|    
+├── app
+|   |
+|   ├── auth
+|   |   ├── __init__.py
+|   |   ├── forms.py
+|   |   └── views.py
+|   ├── home
+|   |   ├── __init__.py
+|   |   ├── forms.py
+|   |   └── views.py
+|   ├── static
+|   |   ├── css
+|   |   |   └── styles.css
+|   |   └── img
+|   |      └── books.jpeg
+|   ├── templates
+|   |   ├── auth
+|   |   |   ├── login.html
+|   |   |   └── register.html
+|   |   ├── home
+|   |   |   ├── book.html
+|   |   |   ├── index.html
+|   |   |   ├── profile.html
+|   |   |   └── results.html
+|   |   ├── includes
+|   |   |   ├── banner.html
+|   |   |   ├── footer.html
+|   |   |   └── navbar.html
+|   |   └── base.html
+|   ├── __init__.py
+|   ├── import.py
+|   └── models.py
+├── flask_session/
+├── instance/
+├── venv
+├── .gitignore
+├── config.py
+├── README.md
+├── requirements.txt
+└──run.py
+```
 
 # Database Structure
 
