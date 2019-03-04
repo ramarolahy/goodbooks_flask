@@ -1,4 +1,3 @@
-
 from flask import flash, redirect, render_template, url_for
 from flask_login import login_required, login_user, logout_user
 from datetime import timedelta
@@ -22,9 +21,9 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         reader = Reader(email=form.email.data,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    password=form.password.data)
+                        first_name=form.first_name.data,
+                        last_name=form.last_name.data,
+                        password=form.password.data)
 
         # add reader to the database
         db.session.add(reader)
@@ -59,7 +58,7 @@ def login():
             login_user(reader, remember=True, duration=timedelta(seconds=1800))
 
             # redirect to the profile page after login
-            return redirect(url_for('home.profile', reader=reader.first_name ))
+            return redirect(url_for('home.profile', reader=reader.first_name))
 
         # when login details are incorrect
         else:
@@ -82,3 +81,5 @@ def logout():
 
     # redirect to the login page
     return redirect(url_for('auth.login'))
+
+

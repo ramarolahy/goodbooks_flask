@@ -11,26 +11,7 @@
 <div class="intro-header">
     <div class="container">
         {% include './includes/banner.html' %}
-        <div class="row">
-            <div class=" card col-lg-12 bg-white">
-                <form class="form-inline py-3" method="POST" role="form">
 
-                    <div class="mx-2">
-                        {{ form.hidden_tag() }}
-                        {{ wtf.form_errors(form, hiddens="only") }}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(form.select)}}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(form.search)}}
-                    </div>
-                    <div class="mx-2">
-                        {{ wtf.form_field(form.submit)}}
-                    </div>
-                </form>
-            </div>
-        </div>
         <div class="row d-flex container__results pt-4">
             {% for book in results %}
             <a class="book__info" href="{{ url_for( 'home.book', isbn=book.isbn ) }}" style="text-decoration: none">

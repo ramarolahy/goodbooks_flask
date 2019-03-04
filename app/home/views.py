@@ -1,12 +1,10 @@
 import requests
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-
 
 from .forms import BookSearchForm, ReviewForm
 from . import home
 from ..models import *
-
 
 
 # Homepage route
@@ -36,22 +34,26 @@ def profile(reader):
         - Search books and view info and reviews
         - Rate and review books
     """
+
     # On first load, display default results
     reviews = Review.query.filter_by(reader_id=current_user.id).all()
     booksReviewed = current_user.books_reviewed
 
-    return render_template('home/profile.html', title="My Books", reviews=reviews, booksReviewed=booksReviewed, active='home')
+    form = BookSearchForm()
+    if form.validate_on_submit():
+        searchBy = form.select.data
+        searchTerm = form.search.data
+        return redirect(url_for('home.results', searchBy=searchBy, searchTerm=searchTerm))
 
-
-
-    #redirect(url_for('home.results', category=category, filter=filter, results=results))
+    return render_template('home/profile.html', title="My Books", form=form, reviews=reviews, booksReviewed=booksReviewed,
+                           active='home')
 
 
 # Profile page route
 # ===============================================
-@home.route('/results/', methods=['GET', 'POST'])
+@home.route('/results/<string:searchBy><string:searchTerm>', methods=['GET', 'POST'])
 @login_required
-def results():
+def results(searchBy, searchTerm):
     """
     Render the profile template on the /profile route
     Users must be logged in to view profile
@@ -60,22 +62,15 @@ def results():
         - Search books and view info and reviews
         - Rate and review books
     """
-    results = Book.query.all()
+    if searchBy is 'isbn':
+        results = Book.query.filter(Book.isbn.contains(searchTerm)).all()
+    elif searchBy is 'author':
+        results = Book.query.filter(Book.author.contains(searchTerm)).all()
+    else :
+        results = Book.query.filter(Book.title.contains(searchTerm)).all()
 
-    def searchResults(category, filter):
-        if category == 'isbn':
-            results = Book.query.filter(Book.isbn.contains(filter)).all()
-        if category == 'author':
-            results = Book.query.filter(Book.author.contains(filter)).all()
-        if category == 'title':
-            results = Book.query.filter(Book.title.contains(filter)).all()
-        return results
+    return render_template('home/results.html', title="My Books", results=results, active='search')
 
-    form = BookSearchForm()
-    if form.validate_on_submit():
-        results =searchResults(form.select.data, form.search.data)
-
-    return render_template('home/results.html', title="My Books", form=form, results=results, active='search')
 
 
 def createReview(review_date, book_isbn, reader_id, rating, title, text):
@@ -95,7 +90,6 @@ def createReview(review_date, book_isbn, reader_id, rating, title, text):
     db.session.commit()
 
 
-
 # Book page route
 # ===============================================
 @home.route('/book/<string:isbn>', methods=['GET', 'POST'])
@@ -111,7 +105,7 @@ def book(isbn):
     if res.status_code != 200:
         raise Exception("ERROR: API request unsuccessful.")
     data = res.json()
-    ratings = data['books'][0]['work_ratings_count']
+    ratings = data['books'][0]['reviews_count']
     average_rating = data['books'][0]['average_rating']
 
     # get book reviews
@@ -123,8 +117,6 @@ def book(isbn):
     # Returns None if current_user was not found
     didReview = Review.query.filter_by(book_isbn=isbn, reader_id=current_user.id).one_or_none()
     book = Book.query.filter_by(isbn=isbn).first()
-
-
 
     reviewForm = ReviewForm()
     if reviewForm.validate_on_submit():
@@ -138,6 +130,39 @@ def book(isbn):
         return redirect(url_for('home.profile', reader=current_user.first_name))
 
     return render_template('home/book.html', title="Book", book=book, reviews=reviews,
-                            reviewForm=reviewForm, readers=readers, didReview=didReview,
+                           reviewForm=reviewForm, readers=readers, didReview=didReview,
                            ratings=ratings, average_rating=average_rating, data=data
                            )
+
+
+@home.route('/api/<isbn>', methods=['GET', 'POST'])
+@login_required
+def api(isbn):
+    """
+    Return JSON data to user after doing an API request
+    :param isbn: book isbn data
+    :return: JSON data
+    """
+    GOODREADS_API_KEY = "JzDtAyR5qcTeAuhFKOHSw"
+
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": GOODREADS_API_KEY, "isbns": isbn})
+    if res.status_code != 200:
+        raise Exception("ERROR: API request unsuccessful.")
+    data = res.json()
+    book_ratings = data['books'][0]['reviews_count']
+    average_rating = data['books'][0]['average_rating']
+
+    book = Book.query.filter_by(isbn=isbn).first()
+    if book is None:
+        return jsonify({"error": "Invalid isbn"}), 404
+
+    return jsonify({
+                "title": book.title,
+                "author": book.author,
+                "year": book.year,
+                "isbn": book.isbn,
+                "review_count": book_ratings,
+                "average_score": average_rating
+    })
+

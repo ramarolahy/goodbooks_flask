@@ -11,6 +11,28 @@
 <div class="intro-header">
     <div class="container">
         {% include './includes/banner.html' %}
+
+        <div class="row">
+            <div class=" card col-lg-12 bg-white">
+                <form class="form-inline py-3" method="POST" role="form">
+
+                    <div class="mx-2">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_errors(form, hiddens="only") }}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.select)}}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.search)}}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.submit)}}
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="row">
             {% if reviews|length != 0 %}
             <div class="card col-lg-12 mt-4 py-2 bg-info text-white"><h4>Books you reviewed</h4></div>
