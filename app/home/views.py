@@ -45,7 +45,8 @@ def profile(reader):
         searchTerm = form.search.data
         return redirect(url_for('home.results', searchBy=searchBy, searchTerm=searchTerm))
 
-    return render_template('home/profile.html', title="My Books", form=form, reviews=reviews, booksReviewed=booksReviewed,
+    return render_template('home/profile.html', title="My Books", form=form, reviews=reviews,
+                           booksReviewed=booksReviewed,
                            active='home')
 
 
@@ -63,14 +64,13 @@ def results(searchBy, searchTerm):
         - Rate and review books
     """
     if searchBy is 'isbn':
-        results = Book.query.filter(Book.isbn.contains(searchTerm)).all()
+        results = Book.query.filter(Book.isbn.ilike(f"%{searchTerm}%"))
     elif searchBy is 'author':
-        results = Book.query.filter(Book.author.contains(searchTerm)).all()
-    else :
-        results = Book.query.filter(Book.title.contains(searchTerm)).all()
+        results = Book.query.filter(Book.author.ilike(f"%{searchTerm}%"))
+    else:
+        results = Book.query.filter(Book.title.ilike(f"%{searchTerm}%"))
 
     return render_template('home/results.html', title="My Books", results=results, active='search')
-
 
 
 def createReview(review_date, book_isbn, reader_id, rating, title, text):
@@ -158,11 +158,10 @@ def api(isbn):
         return jsonify({"error": "Invalid isbn"}), 404
 
     return jsonify({
-                "title": book.title,
-                "author": book.author,
-                "year": book.year,
-                "isbn": book.isbn,
-                "review_count": book_ratings,
-                "average_score": average_rating
+        "title": book.title,
+        "author": book.author,
+        "year": book.year,
+        "isbn": book.isbn,
+        "review_count": book_ratings,
+        "average_score": average_rating
     })
-
