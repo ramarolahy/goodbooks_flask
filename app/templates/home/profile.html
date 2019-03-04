@@ -1,0 +1,62 @@
+{%  extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Profile{% endblock %}
+
+{% block header %}
+{% include './includes/navbar.html' %}
+{% endblock %}
+
+{% block body %}
+<div class="intro-header">
+    <div class="container">
+        {% include './includes/banner.html' %}
+
+        <div class="row">
+            <div class=" card col-lg-12 bg-white">
+                <form class="form-inline py-3" method="POST" role="form">
+
+                    <div class="mx-2">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_errors(form, hiddens="only") }}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.select)}}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.search)}}
+                    </div>
+                    <div class="mx-2">
+                        {{ wtf.form_field(form.submit)}}
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            {% if reviews|length != 0 %}
+            <div class="card col-lg-12 mt-4 py-2 bg-info text-white"><h4>Books you reviewed</h4></div>
+            <div class="row d-flex container__results pt-4">
+                {% for book in booksReviewed %}
+                <a class="book__info" href="{{ url_for( 'home.book', isbn=book.isbn ) }}" style="text-decoration: none">
+                    <div class="container__book--info container__book--info-link card py-3 px-3 mx-3 my-3"
+                         style="width: 15em">
+                        <img class="card-img-top mb-3" src="{{ url_for('static', filename='img/books.jpeg') }}"
+                             alt="Card image cap">
+                        <h4 class="book__info--title">{{ book.title }}</h4>
+                        <span class="book__info--author">by <b>{{ book.author }}</b></span>
+                        <br>
+                        <span class="book__info--isbn float-right">isbn: {{ book.isbn }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            {% else %}
+            <div class="card col-lg-12 my-4 py-2 bg-warning "><h4>You have not reviewed any books yet <i class="far fa-frown"></i></h4>
+            </div>
+            {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

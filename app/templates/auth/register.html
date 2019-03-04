@@ -1,0 +1,23 @@
+{% import "bootstrap/utils.html" as utils %}
+{% import "bootstrap/wtf.html" as wtf %}
+{%  extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block header %}
+{% include './includes/navbar.html' %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="card jumbotron my-5">
+        <div class="wrapper">
+            {{ utils.flashed_messages() }}
+            <h1>Sign Up Here</h1>
+            <br>
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

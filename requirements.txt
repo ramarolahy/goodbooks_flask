@@ -2,3 +2,12 @@ Flask
 Flask-Session
 psycopg2
 SQLAlchemy
+flask-login
+flask-migrate
+psycopg2-binary
+Flask-WTF
+wtforms
+is-safe-url
+flask-bootstrap
+requests
+datetime
