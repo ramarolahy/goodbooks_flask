@@ -14,15 +14,16 @@
         <div class="row d-flex justify-content-around pt-4">
             <div class="container__book--info card col-lg-12 py-3 px-3 mx-3 my-3">
                 <div class="image__book mb-3"
-                     style="background-image:url({{ url_for('static', filename='img/books.jpeg') }})"></div>
+                     style="background-image:url({{ url_for('static', filename='img/books.jpeg') }})">
+                    <h1 class="book__info--title-lg text-white ml-5">{{ book.title }}</h1>
+                </div>
                 <div class="px-5 clearfix">
-                    <h1 class="book__info--title">{{ book.title }}</h1>
                     <h3 class="book__info--author">by <b>{{ book.author }}</b></h3><br>
                     <span>Published in:&nbsp;<b>{{ book.year }}</b></span>
                     <br>
                     <h4 class="book__info--isbn float-right">isbn: {{ book.isbn }}</h4>
                     <br>
-                    <span class=" alert alert-info"><b style="font-size:1.2em">GoodReads Stats</b> - <b>Number of Reviews: </b>{{ ratings }} - <b>Average Rating: </b>{{ average_rating}}</span>
+                    <span class="text-info"><b style="font-size:1.2em">GoodReads Stats</b> - <b>Number of Reviews: </b>{{ ratings }} - <b>Average Rating: </b>{{ average_rating}} / 5</span>
                     <hr class=" my-5" style="width: 80%">
                 </div>
                 <div class="px-5 pb-5">

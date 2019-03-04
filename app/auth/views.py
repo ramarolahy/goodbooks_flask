@@ -35,7 +35,7 @@ def register():
         return redirect(url_for('auth.login'))
 
     # load registration template
-    return render_template('auth/register.html', form=form, title='Register')
+    return render_template('auth/register.html', form=form, title='Register', active='register')
 
 
 # Login route
@@ -66,7 +66,7 @@ def login():
             flash('Invalid email or password.', 'error')
 
     # load login template
-    return render_template('auth/login.html', form=form, title='Login')
+    return render_template('auth/login.html', form=form, title='Login', active='login')
 
 
 # Logout route

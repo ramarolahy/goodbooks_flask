@@ -40,7 +40,7 @@ def profile(reader):
     reviews = Review.query.filter_by(reader_id=current_user.id).all()
     booksReviewed = current_user.books_reviewed
 
-    return render_template('home/profile.html', title="My Books", reviews=reviews, booksReviewed=booksReviewed)
+    return render_template('home/profile.html', title="My Books", reviews=reviews, booksReviewed=booksReviewed, active='home')
 
 
 
@@ -75,7 +75,7 @@ def results():
     if form.validate_on_submit():
         results =searchResults(form.select.data, form.search.data)
 
-    return render_template('home/results.html', title="My Books", form=form, results=results)
+    return render_template('home/results.html', title="My Books", form=form, results=results, active='search')
 
 
 def createReview(review_date, book_isbn, reader_id, rating, title, text):
@@ -139,5 +139,5 @@ def book(isbn):
 
     return render_template('home/book.html', title="Book", book=book, reviews=reviews,
                             reviewForm=reviewForm, readers=readers, didReview=didReview,
-                           ratings=ratings, average_rating=average_rating
+                           ratings=ratings, average_rating=average_rating, data=data
                            )
