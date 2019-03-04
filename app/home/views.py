@@ -1,5 +1,7 @@
+import requests
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+
 
 from .forms import BookSearchForm, ReviewForm
 from . import home
@@ -102,6 +104,15 @@ def book(isbn):
     """
     Render the book template on the /book/isbn route
     """
+    GOODREADS_API_KEY = "JzDtAyR5qcTeAuhFKOHSw"
+
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": GOODREADS_API_KEY, "isbns": isbn})
+    if res.status_code != 200:
+        raise Exception("ERROR: API request unsuccessful.")
+    data = res.json()
+    ratings = data['books'][0]['work_ratings_count']
+    average_rating = data['books'][0]['average_rating']
 
     # get book reviews
     reviews = Review.query.filter_by(book_isbn=isbn).all()
@@ -127,5 +138,6 @@ def book(isbn):
         return redirect(url_for('home.profile', reader=current_user.first_name))
 
     return render_template('home/book.html', title="Book", book=book, reviews=reviews,
-                            reviewForm=reviewForm, readers=readers, didReview=didReview
+                            reviewForm=reviewForm, readers=readers, didReview=didReview,
+                           ratings=ratings, average_rating=average_rating
                            )
