@@ -73,16 +73,16 @@ project1-ramarolahy
 |   REVIEWS	|    O-M  	|    O-M  	|     --  	|
 
 **BOOK**
-|   ID	|   isbn	|   title	|   author	|   year	|
+|   int:ID	|   str:isbn	|   str:title	|   str:author	|   str:year	|
 
 **READER**
-|   ID	|   email	|   first_name	|   last_name	|   password_hash	|
+|   int:ID	|   str:email	|   str:first_name	|   str:last_name	|   str:password_hash	|
 
 **REVIEWS**
-|   ID	|   review_date	|   rating	|   review_title	|   review_text	|   book_isbn fk	|   reader_id fk	|
+|   int:ID	|   datetime:review_date	|   str:rating	|   str:review_title	|   str:review_text	|   str:book_isbn fk	|   int:reader_id fk	|
 
 **ASSOCIATION**
-|   reader_id fk	|   book_isbn fk	|
+|   int:reader_id fk	|   str:book_isbn fk	|
 
 # Packages Used
 See requirements.txt
@@ -90,6 +90,10 @@ See requirements.txt
 # Other Notes
 My search feature started acting strange last minute after I did some refactoring. It worked before but now it seems to 
 split the search term in to characters and finds all matching results.
+
+I added a feature where readers can see all books they reviewed on their profile page.
+
+On the book page view, the review submitted by the reader will be displayed at the very top.
 
 I did get time to refactor the search commands to core SQL. Implementing the app with SQLAlchemy allowed me to work faster
 and I was planning on refactoring later but ran out of time.
