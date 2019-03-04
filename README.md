@@ -54,6 +54,7 @@ project1-ramarolahy
 |   ├── __init__.py
 |   ├── import.py
 |   └── models.py
+|
 ├── flask_session/
 ├── instance/
 ├── venv
@@ -61,7 +62,7 @@ project1-ramarolahy
 ├── config.py
 ├── README.md
 ├── requirements.txt
-└──run.py
+└── run.py
 ```
 
 # Database Structure
