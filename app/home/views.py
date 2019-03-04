@@ -63,9 +63,9 @@ def results(searchBy, searchTerm):
         - Search books and view info and reviews
         - Rate and review books
     """
-    if searchBy is 'isbn':
+    if searchBy == 'isbn':
         results = Book.query.filter(Book.isbn.ilike(f"%{searchTerm}%"))
-    elif searchBy is 'author':
+    elif searchBy == 'author':
         results = Book.query.filter(Book.author.ilike(f"%{searchTerm}%"))
     else:
         results = Book.query.filter(Book.title.ilike(f"%{searchTerm}%"))
