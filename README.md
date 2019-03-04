@@ -1,6 +1,5 @@
 # Project 1
 + By: Mbinintsoa 'Ram' Ramarolahy
-+ Production URL: <url>
 
 # Website description
 GoodBooks by GoodReads allows readers to open an account, search for books and see the reviews
