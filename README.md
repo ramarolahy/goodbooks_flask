@@ -56,7 +56,6 @@ project1-ramarolahy
 
 # Database Structure
 
-```markdown
 |   TABLE	|   READER	|   BOOK	|   REVIEWS	|
 |---	    |---	    |---	    |---    	|
 |   READER	|     --   	|    M-M    |    O-M  	|
@@ -74,7 +73,7 @@ project1-ramarolahy
 
 **ASSOCIATION**
 |   int:reader_id fk	|   str:book_isbn fk	|
-```
+
 
 # Packages Used
 See requirements.txt
