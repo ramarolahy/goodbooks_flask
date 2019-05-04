@@ -1,4 +1,4 @@
-# Project 1
+# Book Review Service
 + By: Mbinintsoa 'Ram' Ramarolahy
 
 # Website description
@@ -6,17 +6,6 @@ GoodBooks by GoodReads allows readers to open an account, search for books and s
 and ratings that users left. 
 Some future extensions will include creating and joining book clubs where fellow readers
 can chat online and talk about their favorite books while sipping matcha!
-
-# Outside resources
-+ https://www.w3schools.com/python/default.asp
-+ https://scotch.io/@mbithenzomo
-+ https://flask-migrate.readthedocs.io/en/latest/
-+ http://flask.pocoo.org/docs/1.0/blueprints/
-+ https://flask-login.readthedocs.io/en/latest/
-+ https://flask-wtf.readthedocs.io/en/stable/quickstart.html
-+ https://pythonhosted.org/Flask-Bootstrap/
-+ https://wtforms.readthedocs.io/en/latest/index.html
-+ https://stackoverflow.com/questions/19699059/representing-directory-file-structure-in-markdown-syntax
 
 # Website Structure
 ```markdown
@@ -67,6 +56,7 @@ project1-ramarolahy
 
 # Database Structure
 
+```markdown
 |   TABLE	|   READER	|   BOOK	|   REVIEWS	|
 |---	    |---	    |---	    |---    	|
 |   READER	|     --   	|    M-M    |    O-M  	|
@@ -84,6 +74,7 @@ project1-ramarolahy
 
 **ASSOCIATION**
 |   int:reader_id fk	|   str:book_isbn fk	|
+```
 
 # Packages Used
 See requirements.txt
